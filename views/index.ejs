@@ -10,13 +10,35 @@
 
 </head>
 <body>
-    <div id="map"></div>
+        <!-- Role selection modal -->
+        <div id="roleModal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;">
+            <div style="background:white;padding:30px 40px;border-radius:10px;text-align:center;">
+                <h2>Select your role</h2>
+                <button id="adminBtn" style="margin:10px 20px;padding:10px 30px;font-size:18px;">Admin/User</button>
+                <button id="busBtn" style="margin:10px 20px;padding:10px 30px;font-size:18px;">Bus</button>
+                <p style="margin-top:20px;color:#888;font-size:14px;">First person to join should select Admin/User. Next should select Bus for demo.</p>
+            </div>
+        </div>
 
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
-    
-    
-    <script src="/js/script.js"></script>
+            <!-- Dashboard panel for live info -->
+            <div id="dashboard" style="position:absolute;top:10px;right:20px;z-index:1100;background:white;padding:15px 22px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);min-width:240px;max-width:320px;display:none;">
+                <div style="font-weight:bold;font-size:18px;margin-bottom:8px;">Dashboard</div>
+                <div id="dashRole" style="margin-bottom:8px;"></div>
+                <div id="dashYou" style="margin-bottom:8px;"></div>
+                <div id="dashOther"></div>
+                <div style="margin-top:10px;font-size:13px;color:#888;">🟢 Admin/User = Pin marker<br>🚌 Bus = Bus marker</div>
+            </div>
+            <div id="map" style="height:100vh;"></div>
+        <!-- ETA and route info container -->
+        <div id="infoPanel" style="position:absolute;top:20px;left:20px;z-index:900;background:white;padding:15px 20px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:none;min-width:220px;">
+            <div id="roleLabel" style="font-weight:bold;margin-bottom:8px;"></div>
+            <div id="eta"></div>
+            <div id="route"></div>
+        </div>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+        <script src="/js/script.js"></script>
 
 </body>
 </html>
