@@ -82,6 +82,13 @@ function startLocationWatch() {
         }
         socket.emit("send-Location",{latitude,longitude, role});
         updateDashboard();
+        // On first location, zoom to user
+        if ((role === 'admin' && adminMarker) || (role === 'bus' && busMarker)) {
+          const marker = role === 'admin' ? adminMarker : busMarker;
+          if(marker) {
+            map.setView(marker.getLatLng(), 16, { animate: true });
+          }
+        }
     },
     (error)=>{
         alert('Geolocation error: ' + error.message);
@@ -164,6 +171,10 @@ function updateDashboard() {
   if(adminMarker && busMarker) {
     const group = new L.featureGroup([adminMarker, busMarker]);
     map.fitBounds(group.getBounds().pad(0.2));
+  } else if(adminMarker) {
+    map.setView(adminMarker.getLatLng(), 16);
+  } else if(busMarker) {
+    map.setView(busMarker.getLatLng(), 16);
   }
 
   // Only admin sees ETA and route
@@ -223,7 +234,19 @@ async function getRouteAndETA(start, end) {
     const data = await res.json();
     if(data && data.features && data.features.length > 0) {
       const coords = data.features[0].geometry.coordinates.map(c => [c[1], c[0]]);
-      routePolyline = L.polyline(coords, {color: 'blue', weight: 5, opacity: 0.7}).addTo(map);
+      // Uber-style: bold, black, slightly transparent
+      routePolyline = L.polyline(coords, {
+        color: 'black',
+        weight: 8,
+        opacity: 0.85,
+        lineJoin: 'round',
+        dashArray: null
+      }).addTo(map);
+      // Fit map to route and markers
+      if(adminMarker && busMarker) {
+        const group = new L.featureGroup([adminMarker, busMarker, routePolyline]);
+        map.fitBounds(group.getBounds().pad(0.2));
+      }
       // Show route info
       const summary = data.features[0].properties.summary;
       const durationMin = Math.round(summary.duration/60);
